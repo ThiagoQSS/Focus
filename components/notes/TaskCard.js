@@ -9,7 +9,7 @@ const TaskCard = ({ title, done, id }) => {
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    isItDone.then((result) => {
+    isItDone(id).then((result) => {
       setIsDone(result === 1 ? true : false);
     });
   }, []);

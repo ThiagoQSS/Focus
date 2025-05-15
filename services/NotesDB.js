@@ -42,14 +42,14 @@ export const deleteAllItems = async () => {
   await db.runAsync(`DELETE FROM tasks;`); // Delete all tasks
 };
 
-export const addTask = async (listId, title) => {
+export const addTask = async (itemId, title) => {
   await db.runAsync(
-    `INSERT INTO tasks (listId, title) VALUES (? , ?)`, [listId, title]
+    `INSERT INTO tasks (itemId, title) VALUES (? , ?)`, [itemId, title]
   );
 }
 
 export const getTasks = async (id) => {
-  const result = await db.getAllAsync(`SELECT * FROM tasks WHERE listId = ?;`, [id]);
+  const result = await db.getAllAsync(`SELECT * FROM tasks WHERE itemId = ?;`, [id]);
   return result;
 }
 

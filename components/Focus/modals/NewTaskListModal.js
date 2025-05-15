@@ -20,7 +20,7 @@ import {
 } from "../../../services/NotesDB";
 
 
-const dataBankOperation = (objective, id, titleS, taskTitle, setTasks, setNotes) => {
+const dataBankOperation = (objective, id, titleS, setTasks, setNotes, taskTitle) => {
   switch (objective) {
     case "adicionar":
       addToItems(titleS, "", "taskList").then(() => 
@@ -41,14 +41,14 @@ const dataBankOperation = (objective, id, titleS, taskTitle, setTasks, setNotes)
       });
       break;
     case "novaTarefa":
-      addTask(id, taskTitle).then(() => {
-        console.log("adding task...");
-        getTasks(id)
-          .then((tasks) => setTasks(tasks))
-          .catch((err) =>
-            console.log("error adding task: ", err)
-          );
-      })
+      addTask(id, taskTitle)
+        .then(() => {
+          console.log("adding task...");
+          getTasks(id)
+            .then((tasks) => setTasks(tasks))
+            .catch((err) => console.log("error adding task: ", err));
+        })
+        .catch((err) => console.log("error editing task: ", err));
       break;
     case "editarLista":
       editTaskList(id, titleS);
@@ -109,7 +109,7 @@ const NewTaskListModal = ({
               <TouchableOpacity
                 style={styles.createButton}
                 onPress={() => {
-                  console.log("the objetive is:", objective);
+                  console.log("5 - the objetive is:", objective);
                   dataBankOperation(objective, id, titleS, setTasks, setNotes, taskTitle);
                   setTaskModalVisible(false);
                 }}
