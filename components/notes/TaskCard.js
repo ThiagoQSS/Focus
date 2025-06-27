@@ -3,32 +3,50 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import Colors from "../constants/Colors";
-import { isItDone } from "../../services/NotesDB";
+import { editTaskDone } from "../../services/NotesDB";
 
-const TaskCard = ({ title, done, id }) => {
-  const [isDone, setIsDone] = useState(false);
+const TaskCard = ({ title, id, done }) => {
+  const [isDone, setIsDone] = useState(done);
 
   useEffect(() => {
-    isItDone(id).then((result) => {
-      setIsDone(result === 1 ? true : false);
-    });
-  }, []);
+    editTaskDone(id, isDone);
+  }, [isDone]);
+
   return (
-    <TouchableOpacity style={styles.container} onLongPress={() => {}}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            id % 2 === 0 ? Colors.darkerSurfaceAlt : Colors.darkerSurface,
+        },
+      ]}
+      onLongPress={() => {}}
+    >
       <TouchableOpacity
-        styles={styles.checkButtonContainer}
+        style={styles.checkButtonContainer}
         onPress={() => {
-          setIsDone(isDone ? false : true);
+          setIsDone(!isDone);
         }}
       >
         <Icon
           name={isDone ? "check" : "square-o"}
-          size={15}
+          size={20}
           color={Colors.green}
           style={styles.checkButton}
         />
       </TouchableOpacity>
-      <Text style={styles.text}>{title}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            textDecorationLine: isDone ? "line-through" : "none",
+            color: isDone ? Colors.textSecondary : Colors.textPrimary,
+          },
+        ]}
+      >
+        {title}
+      </Text>
       <View style={{ flex: 1 }} />
       <Icon
         name="ellipsis-v"
@@ -52,12 +70,9 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     paddingHorizontal: 10,
   },
-  checkButton: {
-    paddingLeft: 10,
-  },
   checkButtonContainer: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
   },

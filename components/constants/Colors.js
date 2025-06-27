@@ -14,6 +14,7 @@ const Colors = {
   surface: "#272727",
   darkSurface: "#191919",
   darkerSurface: "#121212",
+  darkerSurfaceAlt: "#222222",
   black: "#000000",
   offBlack: "#111111",
   background: "#000222",

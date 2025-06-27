@@ -1,35 +1,68 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Colors from "../constants/Colors";
-import { Dimensions } from "react-native";
 import { router } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { editIsFavorite, getPassword } from "../../services/NotesDB";
+import Colors from "../constants/Colors";
+import { NotesContext } from "../contexts/NotesContext";
+
 const { width, height } = Dimensions.get("window");
 
-const NoteBlock = ({ title = "Notes!", id = -1, body, type = "note" }) => {
+const NoteBlock = ({
+  title = "Notes!",
+  id = -1,
+  body,
+  type = "note",
+  isFavorite,
+}) => {
+  const [star, setStar] = useState(isFavorite);
+  const { notes, setNotes } = useContext(NotesContext);
 
-  const [starName, setStarName] = useState("star-o");
+  const [getPassword, setGetPassword] = useState(null);
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() =>
-        router.push({ pathname: "/notes", params: { title, id, body, type } })
-      }
+      onPress={() => {
+        getPassword(id).then((password) => {
+          if (password) {
+            
+          }
+        });
+        router.push({ pathname: "/notes", params: { title, id, body, type, isFavorite:star } });
+      }}
     >
-      <TouchableOpacity style={styles.starContainer}>
-        <Icon name={starName} size={15} color={Colors.green} />
+      <TouchableOpacity
+        style={styles.starContainer}
+        onPress={() => {
+          const newStar = +!star;
+          setStar(+!star);
+          setNotes(
+            notes.map((note) =>
+              note.id === id ? { ...note, isFavorite: newStar } : note
+            )
+          );
+          editIsFavorite(id, newStar);
+        }}
+      >
+        <Icon name={star ? "star" : "star-o"} size={15} color={Colors.green} />
       </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.text} numberOfLines={3}>
           {title}
         </Text>
       </View>
-      { type !== "note" &&
-        <TouchableOpacity style={styles.checkContainer}>
+      {type !== "note" && (
+        <View style={styles.checkContainer}>
           <Icon name="check" size={15} color={Colors.green} />
-        </TouchableOpacity>
-      }
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

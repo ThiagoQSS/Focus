@@ -1,25 +1,21 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
-  View,
-  StyleSheet,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
-  Modal,
-  Text,
-  Pressable,
-  TextInput,
+  View
 } from "react-native";
-import Colors from "../components/constants/Colors";
-import CustomTopBar from "../components/commom/CustomTopBar";
-import CustomBottomBar from "../components/commom/CustomBottomBar";
-import NoteBlock from "../components/Focus/NoteBlock";
 import Icon from "react-native-vector-icons/Fontisto";
-import { deleteAllItems, getItems } from "../services/NotesDB";
+import CustomBottomBar from "../components/commom/CustomBottomBar";
+import CustomTopBar from "../components/commom/CustomTopBar";
+import Colors from "../components/constants/Colors";
 import {
+  bodyContext,
   NotesContext,
   titleContext,
-  bodyContext,
 } from "../components/contexts/NotesContext";
+import NoteBlock from "../components/Focus/NoteBlock";
+import { deleteAllItems, getItems } from "../services/NotesDB";
 
 import NewNoteModal from "../components/Focus/modals/NewNoteModal";
 import NewTaskListModal from "../components/Focus/modals/NewTaskListModal";
@@ -44,7 +40,7 @@ export default function Focus() {
         <FlatList
           style={styles.flatlist}
           showsVerticalScrollIndicator={false}
-          data={[...notes].reverse()}
+          data={[...notes].reverse().sort((a, b) => b.isFavorite - a.isFavorite)}
           numColumns={2}
           columnWrapperStyle={{
             justifyContent: "space-between",
@@ -57,29 +53,12 @@ export default function Focus() {
               title={item.title}
               isFavorite={item.isFavorite}
               body={item.body}
-              type={item.type} 
+              type={item.type}
             />
           )}
         />
       </View>
 
-      <NewNoteModal 
-        newModalVisible={newModalVisible}
-        setNewModalVisible={setNewModalVisible}
-        setTaskModalVisible={setTaskModalVisible}
-        setTitle={setTitle}
-        setBody={setBody}
-      />
-
-      <NewTaskListModal 
-        taskModalVisible={taskModalVisible}
-        setTaskModalVisible={setTaskModalVisible}
-        setTitle={setTitle}
-        setNotes={setNotes}
-        titleS={titleS}
-        setBody={setBody}
-        objective={objective}
-      />
       <CustomBottomBar>
         <TouchableOpacity
           style={styles.buttonContainer}
@@ -90,6 +69,7 @@ export default function Focus() {
         >
           <Icon name="plus-a" size={20} color={Colors.white} />
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
@@ -101,6 +81,24 @@ export default function Focus() {
           <Icon name="trash" size={20} color={Colors.white} />
         </TouchableOpacity>
       </CustomBottomBar>
+
+      <NewNoteModal
+        newModalVisible={newModalVisible}
+        setNewModalVisible={setNewModalVisible}
+        setTaskModalVisible={setTaskModalVisible}
+        setTitle={setTitle}
+        setBody={setBody}
+      />
+
+      <NewTaskListModal
+        taskModalVisible={taskModalVisible}
+        setTaskModalVisible={setTaskModalVisible}
+        setTitle={setTitle}
+        setNotes={setNotes}
+        titleS={titleS}
+        setBody={setBody}
+        objective={objective}
+      />
     </View>
   );
 }

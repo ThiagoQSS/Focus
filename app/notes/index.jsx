@@ -20,13 +20,13 @@ import {
   titleContext,
 } from "../../components/contexts/NotesContext";
 import NewTaskListModal from "../../components/Focus/modals/NewTaskListModal";
-import { getTasks } from "../../services/NotesDB";
+import { editIsFavorite, getTasks } from "../../services/NotesDB";
 import CustomBottomBar from "../../components/commom/CustomBottomBar";
 import Icon from "react-native-vector-icons/Fontisto";
 import TaskCard from "../../components/notes/TaskCard";
 
 const Notes = () => {
-  const { title, id, body, type } = useLocalSearchParams();
+  const { title, id, body, type, isFavorite } = useLocalSearchParams();
 
   const { bodyS, setBody } = useContext(bodyContext);
   const { notes, setNotes } = useContext(NotesContext);
@@ -40,7 +40,7 @@ const Notes = () => {
     getTasks(id).then((tasks) => setTasks(tasks));
   }, []);
 
-  const [starIconName, setStarIconName] = useState("star-o");
+  const [starIconName, setStarIconName] = useState(isFavorite == 1 ? "star" : "star-o");
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [taskModalVisible, setTaskModalVisible] = useState(false);
   const [objective, setObjective] = useState("");
@@ -59,9 +59,8 @@ const Notes = () => {
           <RightIcon
             name={starIconName}
             onPress={() => {
-              console.log(starIconName);
               setStarIconName(starIconName === "star-o" ? "star" : "star-o");
-              //TODO: alterar no banco de dados
+              editIsFavorite(id, starIconName === "star-o" ? 1 : 0);
             }}
           />
         </CustomTopBar>
@@ -89,6 +88,7 @@ const Notes = () => {
               }
             />
           </View>
+
           {type === "note" ? (
             <ScrollView style={styles.scrollContainer}>
               <Text style={styles.text}>{bodyS}</Text>
@@ -107,7 +107,8 @@ const Notes = () => {
           <PasswordModal
             isVisible={passwordModalVisible}
             onClose={setPasswordModalVisible}
-            onCheck={() => {}}
+            id={id}
+            objective="Entrar"
           />
           <NewTaskListModal
             objective={objective}

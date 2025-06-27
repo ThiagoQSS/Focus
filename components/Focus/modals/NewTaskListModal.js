@@ -78,9 +78,8 @@ const NewTaskListModal = ({
 
   return (
     <Modal animationType="fade" visible={taskModalVisible} transparent>
-      <Pressable
+      <View
         style={styles.modalCentered}
-        onPress={() => setTaskModalVisible(false)}
       >
         <View style={styles.taskModalContent}>
           <View
@@ -109,8 +108,17 @@ const NewTaskListModal = ({
               <TouchableOpacity
                 style={styles.createButton}
                 onPress={() => {
-                  console.log("5 - the objetive is:", objective);
-                  dataBankOperation(objective, id, titleS, setTasks, setNotes, taskTitle);
+                  if (taskTitle.trim() !== "" || titleS.trim() !== "") {
+                    console.log("5 - the objetive is:", objective);
+                    dataBankOperation(
+                      objective,
+                      id,
+                      titleS,
+                      setTasks,
+                      setNotes,
+                      taskTitle
+                    );
+                  }
                   setTaskModalVisible(false);
                 }}
               >
@@ -119,7 +127,7 @@ const NewTaskListModal = ({
             </View>
           </View>
         </View>
-      </Pressable>
+      </View>
     </Modal>
   );
 };

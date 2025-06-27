@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   View,
@@ -10,17 +10,22 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { editPassword } from "../../services/NotesDB";
 
 const { width, height } = Dimensions.get("window");
 
-const PasswordModal = ({ isVisible, onClose }) => {
+const PasswordModal = ({ isVisible, onClose, id, objective = "adicionar" }) => {
+  const [newPassword, setNewPassword] = useState("");
+
+  const modalTitle = objective === "adicionar" ? "Crie uma Senha" : "Digite a Senha";
+
   return (
     <Modal animationType="fade" visible={isVisible} transparent={true}>
       <View style={styles.modalContent}>
         <View style={styles.container}>
           <View style={{ flex: 2 }}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>Crie uma Senha</Text>
+              <Text style={styles.title}>{modalTitle}</Text>
             </View>
             <View style={styles.insideContainer}>
               <TextInput
@@ -28,6 +33,8 @@ const PasswordModal = ({ isVisible, onClose }) => {
                 placeholderTextColor={Colors.textSecondary}
                 color={Colors.white}
                 style={styles.textInput}
+                value={newPassword}
+                onChangeText={(text) => setNewPassword(text)}
               />
               <View style={{ flex: 1 }} />
             </View>
@@ -41,7 +48,11 @@ const PasswordModal = ({ isVisible, onClose }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: Colors.green }]}
-              onPress={() => onClose(false)}
+              onPress={() => {
+                if (newPassword.trim()) {
+                  editPassword(id, newPassword);
+                onClose(false);
+              }}}
             >
               <Icon name="check" size={20} color={Colors.darkGreen} />
             </TouchableOpacity>
@@ -64,7 +75,6 @@ const styles = StyleSheet.create({
     width: "50%",
     borderRadius: 10,
     backgroundColor: Colors.surface,
-    
   },
   title: {
     fontSize: 20,
