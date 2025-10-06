@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
 import { Redirect } from 'expo-router';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 const index = () => {
   const user = useState(true);
