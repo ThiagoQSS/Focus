@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { Colors } from '../../constants/Colors';
+import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { pageStyles } from '../../commomStyles/styles';
+import { pageStyles } from '@/commomStyles/styles';
 import { LinearGradient } from 'expo-linear-gradient';
-import Notes from '../../components/navContents/Notes';
+import Notes from '@/components/navContents/Notes';
 import Alarms from '@/components/navContents/Alarms';
+import { router } from 'expo-router';
+import { AppRoutes } from './_layout';
 
 const Home = () => {
   // Página dedicada à navegação entre as principais telas
@@ -16,7 +18,7 @@ const Home = () => {
       </View>
 
       <View style={styles.container}>
-        <NavButton retangle content={<Notes/>}/>
+        <NavButton retangle content={<Notes/>} onPress={() => router.push(AppRoutes.NOTES)}/>
 
         <View style={styles.row}>
           <NavButton square width='50%' flex content={<Alarms/>}/>
@@ -43,6 +45,7 @@ const NavButton = ({
   retangle = false,
   column = false,
   flex = false,
+  onPress,
   content: children,
 }) => {
   let aspectRatio;
@@ -59,15 +62,15 @@ const NavButton = ({
     flex: flex ? 1 : 0,
   };
   return (
-    <View style={boxstyle}>
-      {/* <LinearGradient
-        colors={['#ffffff1e', '#05013a5b']}
+    <TouchableOpacity style={boxstyle} onPress={onPress}>
+      <LinearGradient
+        colors={['#040404c2', '#0301245b']}
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-      /> */}
+      />
       {children}
-    </View>
+    </TouchableOpacity>
   );
 };
 

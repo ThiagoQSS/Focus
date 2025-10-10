@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 const index = () => {
   const user = useState(true);
 
-  const path = user ? 'pages/Home' : 'auth/Login';
+  const path = user ? '/Home' : 'auth/Login';
   
   return <Redirect href={path} />;
 }

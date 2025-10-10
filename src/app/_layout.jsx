@@ -18,6 +18,8 @@ export default function Layout() {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="pages" options={{animation: 'slide_from_right'}}/>
+        <Stack.Screen name="Home" />
       </Stack>
     </View>
   );
@@ -38,14 +40,8 @@ export const AppRoutes = {
   // Usadas para telas que não precisam de parâmetros.
   LOGIN: '/auth/Login',
   SIGNIN: '/auth/Signin',
-  HOME: '/pages/Home',
   SETTINGS: '/pages/Settings',
   NOTIFICATIONS: '/pages/Notifications',
-  CHAT: '/pages/Chat',
-  LEARNING: '/pages/learning',
-  SELF_EVALUATION: '/pages/SelfEvaluation',
-  EDIT_INFO: '/pages/editinfo',
-  VACINE: '/pages/Vacine',
-  PREGNANCY: '/pages/pregnancy',
-  SCHEDULE: '/pages/schedule',
+  HOME: '/Home',
+  NOTES: '/pages/Notes',
 };

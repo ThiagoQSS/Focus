@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     transform: [{ rotate: '15deg' }, { translateY: 30 }, { translateX: -10 }],
-    elevation: 5,
   },
   cardShadow: {
     position: 'absolute',
