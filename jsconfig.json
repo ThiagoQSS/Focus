@@ -1,0 +1,17 @@
+// jsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "components/*": ["src/components/*"],
+      "hooks/*": ["src/hooks/*"],
+      "utils/*": ["src/utils/*"],
+      "assets/*": ["src/assets/*"],
+      "fakedatas/*": ["src/fakedatas/*"],
+      "commonstyles/*": ["src/commomstyles/*"],
+      "constants/*": ["src/constants/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

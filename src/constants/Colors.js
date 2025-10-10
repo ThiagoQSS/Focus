@@ -1,4 +1,14 @@
 export const Colors = {
-  primary: '#26e6ffff',
+  primary: '#6251ffff',
   background: '#181818ff',
+  white: '#ffffff',
+  offWhite: '#e6e6e6',
+  black: '#000000',
+  offBlack: '#1a1a1a',
+  smoothDark: '#252323ff',
+  smoothLight: '#50406aff',
+  gray: '#8e8e8e',
+  lightGray: '#c4c4c4',
+  darkGray: '#333333',
+  placeholder: 'rgba(0, 0, 0, 0.25)',
 };
