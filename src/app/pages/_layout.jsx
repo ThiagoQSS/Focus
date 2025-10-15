@@ -17,6 +17,7 @@ export default function Layout() {
         }}
       >
         <Stack.Screen name="Notes" options={{animation: 'slide_from_bottom', headerTitle: 'Anotações'}} />
+        <Stack.Screen name="Anotation" options={({route}) => ({animation: 'slide_from_right', headerTitle: route.params?.title})} />
       </Stack>
     </View>
   );

@@ -53,7 +53,13 @@ const textStyles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
-  }
+  },
+  smallHeader: {
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
 
 export { pageStyles, textStyles };

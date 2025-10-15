@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
-        colors={['#484776ff', '#121111ff']}
+        colors={['#1e1d3fff', '#121111ff']} //#484776ff , #121111ff , 
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
