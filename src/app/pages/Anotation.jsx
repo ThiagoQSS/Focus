@@ -1,47 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { pageStyles } from '@/commomStyles/styles';
+import { pageStyles, textStyles } from '@/commomStyles/styles';
+import { OptionsButton } from '@/components/anotation/OptionsButton';
 import { Colors } from '@/constants/Colors';
-import Animated, {
-  useAnimatedProps,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 const Anotation = () => {
-  const width = useSharedValue(50);
-  const height = useSharedValue(50);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    width: withSpring(width.value),
-    height: withSpring(height.value),
-  }));
-
-  const ATouchable = Animated.createAnimatedComponent(TouchableOpacity);
-  const [isOpen, setIsOpen] = useState(false);
-  const handleTouch = () => {
-    setIsOpen(!isOpen);
-    width.value = width.value === 50 ? 350 : 50;
-  };
-
   return (
     <View style={styles.container}>
-      <ATouchable
-        style={[styles.newButton, animatedStyle]}
-        onPress={handleTouch}
-      >
-        {!isOpen ? (
-          <FontAwesome6 name='plus' size={25} color={Colors.primary} />
-        ) : (
-          <>
-            <FontAwesome6 name='minus' size={25} color={Colors.primary} />
-            <FontAwesome6 name='minus' size={25} color={Colors.primary} />
-            <FontAwesome6 name='minus' size={25} color={Colors.primary} />
-          </>
-        )}
-      </ATouchable>
+      <Text style={textStyles.subtitle}>Loren ipsun</Text>
+      {/* <FlatList /> */}
+      <OptionsButton />
     </View>
   );
 };
@@ -52,15 +19,22 @@ const styles = StyleSheet.create({
   container: {
     ...pageStyles.hpadding,
     flex: 1,
+    alignItems: 'flex-start',
+    gap: 10,
   },
   newButton: {
-    width: 50,
-    height: 50,
     borderRadius: 50,
     backgroundColor: Colors.smoothDark,
     justifyContent: 'space-around',
     alignItems: 'center',
     elevation: 5,
     flexDirection: 'row',
+    flexShrink: 1,
+    padding: 10,
+  },
+  innerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
 });
