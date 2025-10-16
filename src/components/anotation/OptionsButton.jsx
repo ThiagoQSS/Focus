@@ -19,17 +19,22 @@ const ATouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 const OptionsButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const selectedOption = useSharedValue(null);
   const position = useSharedValue(0);
+
   const handleTouch = () => {
     setIsOpen(!isOpen);
     isOpen ? (position.value = 0) : (position.value = 60);
+    selectedOption.value = null;
   };
-  const buttons = [
-    { icon: 'edit', onPress: () => {} },
-    { icon: 'image', onPress: () => {} },
-    { icon: 'list', onPress: () => {} },
-  ];
+
+  const buttons = [{ icon: 'edit' }, { icon: 'image' }, { icon: 'list' }];
+
+  const editorStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withSpring(selectedOption.value === 'edit' ? 1 : 0),
+    };
+  });
 
   return (
     <View style={styles.container}>
@@ -41,6 +46,7 @@ const OptionsButton = () => {
             onPress={button.onPress}
             position={position}
             index={index}
+            selectedOption={selectedOption}
           />
         ))}
 
@@ -53,7 +59,7 @@ const OptionsButton = () => {
         </ATouchable>
       </View>
 
-      <View style={styles.editorBox}>
+      <Animated.View style={[styles.editorBox, editorStyle]}>
         <TextInput
           style={styles.input}
           cursorColor={Colors.primary}
@@ -61,23 +67,33 @@ const OptionsButton = () => {
           placeholder='Digite suas ideias...'
           multiline
           scrollEnabled={false}
+          placeholderTextColor={Colors.offWhite}
         />
-      </View>
+      </Animated.View>
     </View>
   );
 };
 
-const Option = ({ icon, onPress, position, index }) => {
+const Option = ({
+  icon,
+  position,
+  index,
+  selectedOption,
+}) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
       left: withSpring(position.value * (index + 1)),
       opacity: withSpring(position.value === 0 ? 0 : 1),
       transform: [{ scale: withSpring(position.value === 0 ? 0.5 : 1) }],
+      borderWidth: withSpring(selectedOption.value === icon ? 1 : 0),
     };
   });
 
   return (
-    <ATouchable style={[styles.newButton, animatedStyle]} onPress={onPress}>
+    <ATouchable
+      style={[styles.newButton, animatedStyle]}
+      onPress={() => selectedOption.value = icon}
+    >
       <FontAwesome6 name={icon} size={20} color={Colors.primary} />
     </ATouchable>
   );
@@ -92,6 +108,7 @@ const styles = StyleSheet.create({
   newButton: {
     position: 'absolute',
     borderRadius: 50,
+    borderColor: Colors.primary,
     backgroundColor: Colors.smoothDark,
     alignItems: 'center',
     justifyContent: 'center',
