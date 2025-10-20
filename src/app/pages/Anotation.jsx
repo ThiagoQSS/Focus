@@ -6,7 +6,6 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 const Anotation = () => {
   return (
     <View style={styles.container}>
-      <Text style={textStyles.subtitle}>Loren ipsun</Text>
       {/* <FlatList /> */}
       <OptionsButton />
     </View>

@@ -1,19 +1,15 @@
-import { textStyles } from '@/commomStyles/styles';
 import { Colors } from '@/constants/Colors';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import ImageOption from './ImageOption';
+import NoteOption from './NoteOption';
+import * as ImagePicker from 'expo-image-picker';
 
 const ATouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -28,13 +24,27 @@ const OptionsButton = () => {
     selectedOption.value = null;
   };
 
-  const buttons = [{ icon: 'edit' }, { icon: 'image' }, { icon: 'list' }];
+  const [image, setImage] = useState(null);
+  const handleImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      // allowsEditing: true,
+      quality: 1,
+      allowsMultipleSelection: true,
+    });
+    console.log(result);
+    if (!result.canceled) {
+      setImage(result.assets);
+    }
+  };
 
-  const editorStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withSpring(selectedOption.value === 'edit' ? 1 : 0),
-    };
-  });
+  const buttons = [
+    { icon: 'edit' },
+    { icon: 'image', onPress: handleImage },
+    { icon: 'list' },
+  ];
+
+  const [triggerPick, setTriggerPick] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -59,17 +69,14 @@ const OptionsButton = () => {
         </ATouchable>
       </View>
 
-      <Animated.View style={[styles.editorBox, editorStyle]}>
-        <TextInput
-          style={styles.input}
-          cursorColor={Colors.primary}
-          verticalAlign='top'
-          placeholder='Digite suas ideias...'
-          multiline
-          scrollEnabled={false}
-          placeholderTextColor={Colors.offWhite}
+      <View>
+        <NoteOption selectedOption={selectedOption} />
+        <ImageOption
+          selectedOption={selectedOption}
+          images={image}
+          handleImage={handleImage}
         />
-      </Animated.View>
+      </View>
     </View>
   );
 };
@@ -79,6 +86,7 @@ const Option = ({
   position,
   index,
   selectedOption,
+  onPress = () => {},
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -92,7 +100,10 @@ const Option = ({
   return (
     <ATouchable
       style={[styles.newButton, animatedStyle]}
-      onPress={() => selectedOption.value = icon}
+      onPress={() => {
+        selectedOption.value = icon;
+        onPress();
+      }}
     >
       <FontAwesome6 name={icon} size={20} color={Colors.primary} />
     </ATouchable>
@@ -118,23 +129,6 @@ const styles = StyleSheet.create({
   },
   buttonBox: {
     height: 50,
-  },
-  editorBox: {
-    width: '100%',
-    minHeight: 200,
-    flex: 1,
-    backgroundColor: Colors.smoothDark,
-    borderRadius: 15,
-    alignItems: 'flex-start',
-    padding: 10,
-  },
-  input: {
-    width: '100%',
-    color: Colors.primary,
-    alignSelf: 'flex-start',
-    // backgroundColor: Colors.placeholder,
-    verticalAlign: 'top',
-    flex: 1,
   },
 });
 

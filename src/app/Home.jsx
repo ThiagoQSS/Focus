@@ -63,12 +63,12 @@ const NavButton = ({
   };
   return (
     <TouchableOpacity style={boxstyle} onPress={onPress}>
-      <LinearGradient
+      {/* <LinearGradient
         colors={['#040404c2', '#0301245b']}
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-      />
+      /> */}
       {children}
     </TouchableOpacity>
   );
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     borderColor: Colors.primary,
     overflow: 'hidden',
-    backgroundColor: Colors.placeholder,
+    backgroundColor: Colors.darkBlue
   },
   row: {
     flexDirection: 'row',
