@@ -1,7 +1,7 @@
 import { Colors } from '@/constants/Colors';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,9 +9,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import ImageOption from './ImageOption';
 import NoteOption from './NoteOption';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker'; 
 
-const ATouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const ATouchable = Animated.createAnimatedComponent(Pressable);
 
 const OptionsButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,14 +25,16 @@ const OptionsButton = () => {
   };
 
   const [image, setImage] = useState(null);
+
   const handleImage = async () => {
+    console.log('Picking image...');
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       // allowsEditing: true,
       quality: 1,
       allowsMultipleSelection: true,
     });
-    console.log(result);
+    // console.log(result);
     if (!result.canceled) {
       setImage(result.assets);
     }
@@ -43,8 +45,6 @@ const OptionsButton = () => {
     { icon: 'image', onPress: handleImage },
     { icon: 'list' },
   ];
-
-  const [triggerPick, setTriggerPick] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -60,7 +60,7 @@ const OptionsButton = () => {
           />
         ))}
 
-        <ATouchable style={styles.newButton} onPress={handleTouch}>
+        <ATouchable style={styles.newButton} onPress={handleTouch} activeOpacity={1.0}>
           <FontAwesome6
             name={isOpen ? 'minus' : 'plus'}
             size={20}
@@ -69,7 +69,7 @@ const OptionsButton = () => {
         </ATouchable>
       </View>
 
-      <View>
+      <View style={{ flex: 1, width: '100%' }}>
         <NoteOption selectedOption={selectedOption} />
         <ImageOption
           selectedOption={selectedOption}
@@ -101,8 +101,11 @@ const Option = ({
     <ATouchable
       style={[styles.newButton, animatedStyle]}
       onPress={() => {
-        selectedOption.value = icon;
-        onPress();
+        if (selectedOption.value === icon) selectedOption.value = null;
+        else {
+          selectedOption.value = icon;
+          onPress();
+        }
       }}
     >
       <FontAwesome6 name={icon} size={20} color={Colors.primary} />

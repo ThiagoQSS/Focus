@@ -11,5 +11,5 @@ export const Colors = {
   gray: '#8e8e8e',
   lightGray: '#c4c4c4',
   darkGray: '#333333',
-  placeholder: 'rgba(0, 0, 0, 0.25)',
+  placeholder: 'rgba(0, 0, 0, 0.55)',
 };

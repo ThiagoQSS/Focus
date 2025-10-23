@@ -1,3 +1,4 @@
+import { pageStyles } from '@/commomStyles/styles';
 import { Colors } from '@/constants/Colors';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
@@ -6,8 +7,9 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import CheckButton from '@/components/commom/CheckButton';
 
-const ImageOption = ({ selectedOption, images, handleImage }) => {
+const ImageOption = ({ selectedOption, images }) => {
   const pickerStyle = useAnimatedStyle(() => {
     return {
       opacity: withSpring(selectedOption.value === 'image' ? 1 : 0),
@@ -16,36 +18,57 @@ const ImageOption = ({ selectedOption, images, handleImage }) => {
   });
 
   return (
-    <Animated.View style={pickerStyle}>
+    <Animated.View style={[styles.container, pickerStyle]}>
       {images && (
         <>
           {images.map((img, index) => (
-            <View style={styles.imgPickerBox} key={img.uri + index}>
-              <Image source={{ uri: img.uri }} style={styles.image} />
-            </View>
+            <ResponsiveImage key={img.uri + index} uri={img.uri} />
           ))}
-          <TouchableOpacity onPress={handleImage}>
-            <FontAwesome6 name='plus' size={24} color={Colors.primary} />
-          </TouchableOpacity>
+          <CheckButton onPress={() => {}}/>
         </>
       )}
     </Animated.View>
   );
 };
 
+export const ResponsiveImage = ({ uri }) => {
+  const [aspectRatio, setAspectRatio] = useState(1);
+
+  useEffect(() => {
+    if (uri) {
+      Image.getSize(
+        uri,
+        (width, height) => setAspectRatio(width / height),
+        (error) => console.error('Erro ao obter tamanho da imagem', error)
+      );
+    }
+  }, [uri]);
+
+  return (
+    <View style={styles.imageBox}>
+      <Image source={{ uri }} style={[styles.image, { aspectRatio }]} />
+    </View>
+  );
+};
+
 export default ImageOption;
 
 const styles = StyleSheet.create({
-  image: {
-    aspectRatio: 1,
-    // height: 180,
-    width: '100%',
-    resizeMode: 'contain',
+  container: {
+    gap: 10,
+    // height: 200,
+    ...pageStyles.grid,
   },
-  imgPickerBox: {
-    alignSelf: 'flex-start',
+  imageBox: {
+    borderRadius: 15,
     backgroundColor: Colors.smoothDark,
     padding: 10,
+    alignSelf: 'flex-start',
+  },
+  image: {
+    width: '100%',
+    maxHeight: 300,
+    resizeMode: 'contain',
     borderRadius: 15,
   },
   text: {

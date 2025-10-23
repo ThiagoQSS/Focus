@@ -4,6 +4,10 @@ import Animated, {
   useAnimatedStyle,
   withSpring
 } from 'react-native-reanimated';
+import CheckButton from '@/components/commom/CheckButton';
+import { createNote } from '@/database/actions/noteActions';
+import { NoteTypes } from '@/database/model/Note';
+import { useState } from 'react';
 
 const NoteOption = ({selectedOption}) => {
   const editorStyle = useAnimatedStyle(() => {
@@ -12,6 +16,8 @@ const NoteOption = ({selectedOption}) => {
       display: selectedOption.value === 'edit' ? 'flex' : 'none',
     };
   });
+
+  const [body, setBody] = useState('');
 
   return (
     <Animated.View style={[styles.editorBox, editorStyle]}>
@@ -23,7 +29,10 @@ const NoteOption = ({selectedOption}) => {
         multiline
         scrollEnabled={false}
         placeholderTextColor={Colors.offWhite}
+        onChangeText={value => setBody(value)}
+        value={body}
       />
+      <CheckButton onPress={() => createNote(NoteTypes.NOTE, null, body)}/>
     </Animated.View>
   );
 };
@@ -39,7 +48,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'flex-start',
     padding: 10,
-    position: 'absolute',
   },
    input: {
     width: '100%',

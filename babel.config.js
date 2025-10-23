@@ -18,7 +18,8 @@ module.exports = function (api) {
             'hooks': './src/hooks',
           }
         }
-      ]
+      ],
+      ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ]
   };
 };

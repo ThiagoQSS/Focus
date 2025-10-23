@@ -2,17 +2,44 @@ import { pageStyles, textStyles } from '@/commomStyles/styles';
 import { OptionsButton } from '@/components/anotation/OptionsButton';
 import { Colors } from '@/constants/Colors';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { withObservables } from '@nozbe/watermelondb/react';
+import { database } from '@/database';
 
-const Anotation = () => {
+const _renderItem = (item) => {
+  switch (item.type) {
+    case 'note':
+      return <Text>Note Item</Text>;
+    case 'image':
+      return <Text>Image Item</Text>;
+    case 'checklist':
+      return <Text>Checklist Item</Text>;
+  }
+};
+
+const AnotationUI = ({anotations}) => {
   return (
     <View style={styles.container}>
-      {/* <FlatList /> */}
-      <OptionsButton />
+      <View style={styles.flatlistContainer}>
+        {/* <Text style={textStyles.title}>Anotações</Text> */}
+        <FlatList
+          data={anotations}
+          renderItem={_renderItem}
+          ListFooterComponent={<OptionsButton />}
+          style={styles.flatlist}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
+      </View>
     </View>
   );
 };
 
+const enhance = withObservables([], () => ({
+  anotations: database.get('notes').query(),
+}));
+const Anotation = enhance(AnotationUI);
+
 export default Anotation;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     gap: 10,
+    // backgroundColor: Colors.placeholder,
   },
   newButton: {
     borderRadius: 50,
@@ -35,5 +63,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  flatlist: {
+    flex: 1,
+  },
+  flatlistContainer: {
+    // backgroundColor: Colors.black,
+    width: '100%',
+    height: '100%',
   },
 });
